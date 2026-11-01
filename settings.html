@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Configuración{% endblock %}
+{% block breadcrumb %}Configuración{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">PREFERENCIAS DEL SISTEMA</span><h1>Configuración <span class="heading-dot">.</span></h1><p class="muted">Personaliza la identidad de tu espacio de trabajo.</p></div></div>
+<div class="settings-layout">
+  <div class="panel"><div class="panel-header"><div><h2>Identidad de la organización</h2><p>Este nombre se mostrará en la navegación y en la interfaz.</p></div></div><form method="post" class="form-stack panel-inner"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><label>Nombre de la empresa o institución<input name="company_name" value="{{ company }}" required maxlength="80"></label><button class="btn btn-primary" type="submit">Guardar configuración</button></form></div>
+  <div class="panel security-card"><div class="security-symbol">▣</div><h2>Seguridad activa</h2><p>Contraseñas almacenadas con hash, sesiones protegidas, permisos por rol y protección CSRF en formularios.</p><ul><li>Contraseñas de 10 caracteres mínimo</li><li>Límite de intentos fallidos de acceso</li><li>Registro de actividad</li><li>Cookies HttpOnly y SameSite</li></ul><div class="notice">Para usarlo fuera de tu computadora, consulta primero una configuración de producción con HTTPS y una clave secreta fija.</div></div>
+</div>
+{% endblock %}

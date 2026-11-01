@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('dashboard') }}">Inventario</a> / {{ page_title }}{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">GESTIÓN DE ACTIVOS</span><h1>{{ page_title }} <span class="heading-dot">.</span></h1><p class="muted">Completa la información para mantener el inventario actualizado.</p></div><a class="btn btn-light" href="{{ url_for('dashboard') }}">← Volver</a></div>
+<form method="post" class="panel form-panel">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="form-section"><div><h2>Información general</h2><p>Identificación y clasificación del equipo.</p></div><div class="form-grid">
+    <label>Código del equipo *<input name="code" required value="{{ item.code or item.get('code','') }}" placeholder="Ej. PC-001"></label>
+    <label>Nombre del equipo *<input name="name" required value="{{ item.name or item.get('name','') }}" placeholder="Ej. Laptop de oficina"></label>
+    <label>Categoría<select name="category_id"><option value="">Sin categoría</option>{% for c in categories %}<option value="{{ c.id }}" {{ 'selected' if (item.category_id|string) == (c.id|string) else '' }}>{{ c.name }}</option>{% endfor %}</select></label>
+    <label>Estado<select name="status">{% for s in ['Disponible','Asignado','En reparación','Dado de baja'] %}<option {{ 'selected' if (item.status or item.get('status','Disponible')) == s else '' }}>{{ s }}</option>{% endfor %}</select></label>
+    <label>Marca<input name="brand" value="{{ item.brand or item.get('brand','') }}" placeholder="Ej. Dell"></label>
+    <label>Modelo<input name="model" value="{{ item.model or item.get('model','') }}" placeholder="Ej. Latitude 5420"></label>
+    <label>Número de serie<input name="serial_number" value="{{ item.serial_number or item.get('serial_number','') }}" placeholder="Serie del fabricante"></label>
+    <label>Ubicación<input name="location" value="{{ item.location or item.get('location','') }}" placeholder="Ej. Oficina / Almacén"></label>
+  </div></div>
+  <div class="form-section"><div><h2>Compra y asignación</h2><p>Datos útiles para seguimiento y mantenimiento.</p></div><div class="form-grid">
+    <label>Persona asignada<input name="assigned_to" value="{{ item.assigned_to or item.get('assigned_to','') }}" placeholder="Nombre del responsable"></label>
+    <label>Valor estimado (RD$)<input type="number" name="value" min="0" step="0.01" value="{{ item.value or item.get('value',0) }}"></label>
+    <label>Fecha de compra<input type="date" name="purchase_date" value="{{ item.purchase_date or item.get('purchase_date','') }}"></label>
+    <label>Garantía hasta<input type="date" name="warranty_until" value="{{ item.warranty_until or item.get('warranty_until','') }}"></label>
+    <label class="span-2">Notas<textarea name="notes" rows="3" placeholder="Observaciones, condición, accesorios...">{{ item.notes or item.get('notes','') }}</textarea></label>
+  </div></div>
+  <div class="form-actions"><span class="muted tiny">* Campos obligatorios</span><div><a class="btn btn-ghost" href="{{ url_for('dashboard') }}">Cancelar</a><button class="btn btn-primary" type="submit">Guardar equipo ✓</button></div></div>
+</form>
+{% endblock %}

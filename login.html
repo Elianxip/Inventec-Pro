@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block auth_content %}
+<div class="auth-screen">
+  <div class="auth-art">
+    <div class="auth-brand"><span class="brand-mark">I</span><span><strong>INVENTEC</strong><small>IT ASSET MANAGEMENT</small></span></div>
+    <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+    <div class="art-copy"><span class="eyebrow">CONTROL · VISIBILIDAD · SEGURIDAD</span><h1>Todo tu inventario.<br><em>En un solo lugar.</em></h1><p>Administra los activos tecnológicos de tu organización con una plataforma clara, moderna y organizada.</p>
+      <div class="art-pills"><span>⌁ Control de activos</span><span>◈ Historial</span><span>✓ Acceso por roles</span></div>
+    </div>
+    <div class="art-footer">INVENTEC PRO <span>•</span> PLATAFORMA DE GESTIÓN</div>
+  </div>
+  <div class="auth-panel">
+    <div class="auth-form-wrap">
+      <div class="mobile-auth-brand"><span class="brand-mark">I</span><b>INVENTEC</b></div>
+      <span class="eyebrow">BIENVENIDO DE NUEVO</span><h2>Inicia sesión</h2><p class="muted">Ingresa tus credenciales para continuar.</p>
+      {% if not users_exist %}<div class="notice">Primera vez aquí. <a href="{{ url_for('setup') }}">Crea la cuenta administradora</a>.</div>{% endif %}
+      <form method="post" class="form-stack">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <label>Nombre de usuario<input name="username" autocomplete="username" required minlength="3" placeholder="Ej. elian.admin"></label>
+        <label>Contraseña<input type="password" name="password" autocomplete="current-password" required placeholder="Tu contraseña"></label>
+        <button class="btn btn-primary btn-full" type="submit">Entrar al sistema <span>→</span></button>
+      </form>
+      <div class="auth-security"><span>▣</span> Tu sesión utiliza cookies protegidas y contraseñas cifradas mediante hash.</div>
+      <small class="auth-copy">Uso autorizado únicamente · Inventec Pro</small>
+    </div>
+  </div>
+</div>
+{% endblock %}

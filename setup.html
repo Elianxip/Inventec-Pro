@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Configurar administrador{% endblock %}
+{% block auth_content %}
+<div class="setup-screen"><div class="setup-card">
+  <div class="auth-brand"><span class="brand-mark">I</span><span><strong>INVENTEC</strong><small>CONFIGURACIÓN INICIAL</small></span></div>
+  <span class="eyebrow">PRIMER PASO</span><h1>Crea tu administrador</h1>
+  <p class="muted">Esta cuenta tendrá control total del sistema. Elige una contraseña única de al menos 10 caracteres.</p>
+  <form method="post" class="form-stack">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <label>Nombre completo<input name="full_name" required autocomplete="name" placeholder="Tu nombre"></label>
+    <label>Nombre de usuario<input name="username" required minlength="3" autocomplete="username" placeholder="Ej. admin.inventec"></label>
+    <label>Contraseña<input type="password" name="password" required minlength="10" autocomplete="new-password" placeholder="Mínimo 10 caracteres"></label>
+    <label>Repite la contraseña<input type="password" name="confirm" required minlength="10" autocomplete="new-password" placeholder="Confirma tu contraseña"></label>
+    <button class="btn btn-primary btn-full" type="submit">Crear administrador →</button>
+  </form>
+  <p class="tiny muted">No compartas tus credenciales. El sistema no incluye una contraseña predeterminada.</p>
+</div></div>
+{% endblock %}

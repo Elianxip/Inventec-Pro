@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101b3b">
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='icon.svg') }}">
+  <title>{% block title %}{{ company_name }}{% endblock %} · Inventec Pro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if session.get('user_id') %}
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}">
+      <span class="brand-mark">I</span><span><strong>{{ company_name }}</strong><small>GESTIÓN DE ACTIVOS</small></span>
+    </a>
+    <div class="nav-label">MENÚ PRINCIPAL</div>
+    <nav class="nav">
+      <a class="{{ 'active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}"><span>▦</span> Panel general</a>
+      <a class="{{ 'active' if request.endpoint and request.endpoint.startswith('equipment') else '' }}" href="{{ url_for('dashboard') }}"><span>▣</span> Inventario</a>
+      {% if current_role in ['admin','tecnico'] %}
+      <a class="{{ 'active' if request.endpoint == 'categories' else '' }}" href="{{ url_for('categories') }}"><span>◫</span> Categorías</a>
+      {% endif %}
+      <a class="{{ 'active' if request.endpoint in ['reports','export_csv'] else '' }}" href="{{ url_for('reports') }}"><span>▤</span> Reportes</a>
+      {% if current_role == 'admin' %}
+      <div class="nav-label nav-spaced">ADMINISTRACIÓN</div>
+      <a class="{{ 'active' if request.endpoint == 'users' else '' }}" href="{{ url_for('users') }}"><span>♙</span> Usuarios y permisos</a>
+      <a class="{{ 'active' if request.endpoint == 'settings' else '' }}" href="{{ url_for('settings') }}"><span>⚙</span> Configuración</a>
+      {% endif %}
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="secure-note"><span>●</span><div><b>Sesión protegida</b><small>Acceso con permisos</small></div></div>
+      <form method="post" action="{{ url_for('logout') }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <button class="logout-btn" type="submit">↪ Cerrar sesión</button>
+      </form>
+      <small class="version">INVENTEC PRO · LOCAL</small>
+    </div>
+  </aside>
+  <main class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('show')" aria-label="Abrir menú">☰</button>
+      <div class="crumb">Espacio de trabajo <span>/</span> <b>{% block breadcrumb %}Panel general{% endblock %}</b></div>
+      <div class="top-user"><div class="avatar">{{ (current_user or 'U')[0]|upper }}</div><div><b>{{ current_user }}</b><small>{{ {'admin':'Administrador','tecnico':'Técnico','consulta':'Consulta'}.get(current_role, current_role) }}</small></div></div>
+    </header>
+    <section class="page-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button type="button" onclick="this.parentElement.remove()">×</button></div>{% endfor %}</div>{% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </section>
+    <footer class="footer">© {{ company_name }} · Gestión inteligente de equipos tecnológicos</footer>
+  </main>
+</div>
+{% else %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}<div class="auth-flashes">{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+{% block auth_content %}{% endblock %}
+{% endif %}
+</body>
+</html>

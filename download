@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+inventec.db
+.env
+.env.*
+!.env.example
+instance/
+dist/
+build/
+*.spec

@@ -1,0 +1,14 @@
+{
+  "name": "Inventec Pro",
+  "short_name": "Inventec",
+  "description": "Sistema de gestión de inventario y equipos",
+  "lang": "es-DO",
+  "start_url": "/login",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fc",
+  "theme_color": "#101b3b",
+  "icons": [
+    { "src": "/static/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

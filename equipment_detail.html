@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ item.name }}{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('dashboard') }}">Inventario</a> / Detalle{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">FICHA DEL ACTIVO · {{ item.code }}</span><h1>{{ item.name }} <span class="heading-dot">.</span></h1><p class="muted">{{ item.brand or 'Sin marca' }}{% if item.model %} · {{ item.model }}{% endif %}</p></div><div class="heading-actions"><a class="btn btn-light" href="{{ url_for('dashboard') }}">← Inventario</a>{% if current_role in ['admin','tecnico'] %}<a class="btn btn-primary" href="{{ url_for('equipment_edit', equipment_id=item.id) }}">✎ Editar equipo</a>{% endif %}</div></div>
+<div class="detail-grid">
+  <div class="panel detail-main"><div class="detail-hero"><div class="large-device">▣</div><div><span class="pill {{ {'Disponible':'pill-green','Asignado':'pill-blue','En reparación':'pill-orange','Dado de baja':'pill-red'}.get(item.status,'pill-gray') }}">{{ item.status }}</span><h2>{{ item.name }}</h2><p>{{ item.category_name or 'Sin categoría' }} · Código <b>{{ item.code }}</b></p></div></div>
+    <div class="detail-fields">
+      <div><small>Marca</small><b>{{ item.brand or 'No especificada' }}</b></div><div><small>Modelo</small><b>{{ item.model or 'No especificado' }}</b></div>
+      <div><small>Número de serie</small><b>{{ item.serial_number or '—' }}</b></div><div><small>Ubicación</small><b>{{ item.location or '—' }}</b></div>
+      <div><small>Persona asignada</small><b>{{ item.assigned_to or 'Sin asignar' }}</b></div><div><small>Valor estimado</small><b>{% if item.value %}RD$ {{ '%.2f'|format(item.value) }}{% else %}No indicado{% endif %}</b></div>
+      <div><small>Fecha de compra</small><b>{{ item.purchase_date or '—' }}</b></div><div><small>Garantía hasta</small><b>{{ item.warranty_until or '—' }}</b></div>
+      <div class="span-2"><small>Notas</small><p>{{ item.notes or 'Sin notas registradas.' }}</p></div>
+      <div><small>Creado</small><b>{{ item.created_at or '—' }}</b></div><div><small>Última actualización</small><b>{{ item.updated_at or '—' }}</b></div>
+    </div>
+  </div>
+  <div class="panel side-panel"><div class="panel-header"><div><h2>Acciones</h2><p>Operaciones disponibles para este activo.</p></div></div>
+    {% if current_role in ['admin','tecnico'] and item.status != 'Dado de baja' %}
+    <form method="post" action="{{ url_for('equipment_assign', equipment_id=item.id) }}" class="form-stack compact-form">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><h3>Asignar equipo</h3>
+      <label>Nombre de la persona<input name="person_name" required placeholder="Responsable"></label><label>Departamento<input name="department" placeholder="Departamento / área"></label><label>Notas<textarea name="notes" rows="2" placeholder="Accesorios entregados, condición..."></textarea></label>
+      <button class="btn btn-primary btn-full" type="submit">Registrar asignación</button>
+    </form>
+    {% endif %}
+    {% if current_role in ['admin','tecnico'] and item.status == 'Asignado' %}
+    <form method="post" action="{{ url_for('equipment_return', equipment_id=item.id) }}" class="return-form"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-light btn-full" type="submit">↩ Registrar devolución</button></form>
+    {% endif %}
+    {% if current_role == 'admin' %}<div class="danger-zone"><h3>Zona de administración</h3><p>Eliminar el registro es una acción permanente.</p><form method="post" action="{{ url_for('equipment_delete', equipment_id=item.id) }}" onsubmit="return confirm('¿Seguro que deseas eliminar este equipo? Esta acción no se puede deshacer.');"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-full" type="submit">Eliminar equipo</button></form></div>{% endif %}
+  </div>
+</div>
+<div class="panel history-panel"><div class="panel-header"><div><h2>Historial de asignaciones</h2><p>Registro de entrega y devolución de este equipo.</p></div></div><div class="table-wrap"><table><thead><tr><th>Persona</th><th>Departamento</th><th>Fecha de entrega</th><th>Fecha de devolución</th><th>Registrado por</th><th>Notas</th></tr></thead><tbody>{% for h in history %}<tr><td><b>{{ h.person_name }}</b></td><td>{{ h.department or '—' }}</td><td>{{ h.assigned_at }}</td><td>{{ h.returned_at or 'Pendiente' }}</td><td>{{ h.assigned_by_name or '—' }}</td><td>{{ h.notes or '—' }}</td></tr>{% else %}<tr><td colspan="6" class="muted pad">Todavía no hay asignaciones registradas.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: inventec-pro
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120
+    healthCheckPath: /login
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: INVENTEC_HTTPS
+        value: "1"
+      - key: INVENTEC_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
