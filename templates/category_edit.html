@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Editar categoría{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('categories') }}">Categorías</a> / Editar{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">INVENTARIO</span><h1>Editar categoría <span class="heading-dot">.</span></h1></div><a class="btn btn-light" href="{{ url_for('categories') }}">← Volver</a></div>
+<div class="panel"><form method="post" class="form-stack panel-inner">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>Nombre<input name="name" required value="{{ c.name }}"></label>
+  <label>Descripción<textarea name="description" rows="3">{{ c.description or '' }}</textarea></label>
+  <button class="btn btn-primary" type="submit">Guardar cambios</button>
+</form></div>
+{% endblock %}

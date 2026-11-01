@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Editar usuario{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('users') }}">Usuarios</a> / Editar{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">ADMINISTRACIÓN</span><h1>Editar usuario <span class="heading-dot">.</span></h1><p class="muted">@{{ u.username }}</p></div><a class="btn btn-light" href="{{ url_for('users') }}">← Volver</a></div>
+<div class="panel"><form method="post" class="form-stack panel-inner">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>Nombre completo<input name="full_name" required value="{{ u.full_name }}"></label>
+  <label>Rol<select name="role">{% for v,l in [('tecnico','Técnico — administra equipos'),('consulta','Consulta — solo lectura'),('admin','Administrador — control total')] %}<option value="{{ v }}" {{ 'selected' if u.role == v else '' }}>{{ l }}</option>{% endfor %}</select></label>
+  <label>Nueva contraseña (opcional)<input type="password" name="password" minlength="10" autocomplete="new-password" placeholder="Déjala vacía para no cambiarla"></label>
+  <button class="btn btn-primary" type="submit">Guardar cambios</button>
+</form></div>
+{% endblock %}

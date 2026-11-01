@@ -43,7 +43,7 @@
     <header class="topbar">
       <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('show')" aria-label="Abrir menú">☰</button>
       <div class="crumb">Espacio de trabajo <span>/</span> <b>{% block breadcrumb %}Panel general{% endblock %}</b></div>
-      <div class="top-user"><div class="avatar">{{ (current_user or 'U')[0]|upper }}</div><div><b>{{ current_user }}</b><small>{{ {'admin':'Administrador','tecnico':'Técnico','consulta':'Consulta'}.get(current_role, current_role) }}</small></div></div>
+      <a class="top-user" href="{{ url_for('account') }}" title="Mi cuenta"><div class="avatar">{{ (current_user or 'U')[0]|upper }}</div><div><b>{{ current_user }}</b><small>{{ {'admin':'Administrador','tecnico':'Técnico','consulta':'Consulta'}.get(current_role, current_role) }}</small></div></a>
     </header>
     <section class="page-content">
       {% with messages = get_flashed_messages(with_categories=true) %}

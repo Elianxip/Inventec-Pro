@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% set back_url = url_for('dashboard') if session.get('user_id') else url_for('login') %}
+{# El mismo contenido se declara en los dos bloques: "content" (con sesión) y "auth_content" (sin sesión). #}
+{% block content %}
+<div class="error-page"><div class="error-code">{{ code }}</div><h1>Algo no salió como esperábamos.</h1><p class="muted">{{ message }}</p><a class="btn btn-primary" href="{{ back_url }}">Volver al sistema</a></div>
+{% endblock %}
+{% block auth_content %}
+<div class="error-page"><div class="error-code">{{ code }}</div><h1>Algo no salió como esperábamos.</h1><p class="muted">{{ message }}</p><a class="btn btn-primary" href="{{ back_url }}">Volver al sistema</a></div>
+{% endblock %}

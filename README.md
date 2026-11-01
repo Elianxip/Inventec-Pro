@@ -24,7 +24,7 @@ Sin `DATABASE_URL`, la aplicación usa `inventec.db` local.
 2. Copia la cadena de conexión PostgreSQL (no la clave publishable de Supabase).
 3. En Render crea un Web Service desde el repositorio GitHub.
 4. Usa `pip install -r requirements.txt` como Build Command y el comando del Procfile como Start Command.
-5. Configura `DATABASE_URL` con la cadena PostgreSQL privada y `INVENTEC_SECRET_KEY` con una clave aleatoria larga. No subas esos valores a GitHub.
+5. Configura la base de datos con `DB_HOST`, `DB_USER`, `DB_PASSWORD` (y `DB_PORT`, `DB_NAME`) **o** con `DATABASE_URL`, y `INVENTEC_SECRET_KEY` con una clave aleatoria larga. No subas esos valores a GitHub.
 6. Configura `INVENTEC_HTTPS=1`.
 7. Cuando el servicio esté listo, abre `/setup` y crea el administrador.
 
@@ -41,3 +41,10 @@ La app crea sus tablas al iniciar. La clave `sb_publishable_...` no sustituye la
 ## Nota de alojamiento gratuito
 
 Los servicios gratuitos pueden suspenderse por inactividad y tardar en despertar. Revisa las condiciones actuales del proveedor antes de usarlo como sistema crítico de negocio.
+
+## Diagnóstico de la conexión
+
+- `/healthz` indica que el servidor web responde (lo usa Render).
+- `/healthz/db` indica `ok` o `unavailable` según haya conexión con la base de datos.
+- Los motivos concretos (usuario inválido, contraseña rechazada, red) aparecen en **Render > Logs**, con la línea `DIAGNÓSTICO:`. Las contraseñas nunca se registran.
+- Con Session Pooler el usuario es `postgres.<referencia>`, no `postgres`.

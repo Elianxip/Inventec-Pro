@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Mi cuenta{% endblock %}
+{% block breadcrumb %}Mi cuenta{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">MI CUENTA</span><h1>Cambiar contraseña <span class="heading-dot">.</span></h1><p class="muted">{{ current_user }} · @{{ session.get('username') }}</p></div></div>
+<div class="panel"><form method="post" class="form-stack panel-inner">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>Contraseña actual<input type="password" name="current_password" required autocomplete="current-password"></label>
+  <label>Nueva contraseña<input type="password" name="new_password" required minlength="10" autocomplete="new-password" placeholder="Mínimo 10 caracteres"></label>
+  <label>Repite la nueva contraseña<input type="password" name="confirm" required minlength="10" autocomplete="new-password"></label>
+  <button class="btn btn-primary" type="submit">Actualizar contraseña</button>
+</form></div>
+{% endblock %}

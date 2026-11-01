@@ -5,6 +5,7 @@
 <div class="page-heading"><div><span class="eyebrow">GESTIÓN DE ACTIVOS</span><h1>{{ page_title }} <span class="heading-dot">.</span></h1><p class="muted">Completa la información para mantener el inventario actualizado.</p></div><a class="btn btn-light" href="{{ url_for('dashboard') }}">← Volver</a></div>
 <form method="post" class="panel form-panel">
   <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <input type="hidden" name="version" value="{{ item.get('version', '') }}">
   <div class="form-section"><div><h2>Información general</h2><p>Identificación y clasificación del equipo.</p></div><div class="form-grid">
     <label>Código del equipo *<input name="code" required value="{{ item.code or item.get('code','') }}" placeholder="Ej. PC-001"></label>
     <label>Nombre del equipo *<input name="name" required value="{{ item.name or item.get('name','') }}" placeholder="Ej. Laptop de oficina"></label>
@@ -16,7 +17,7 @@
     <label>Ubicación<input name="location" value="{{ item.location or item.get('location','') }}" placeholder="Ej. Oficina / Almacén"></label>
   </div></div>
   <div class="form-section"><div><h2>Compra y asignación</h2><p>Datos útiles para seguimiento y mantenimiento.</p></div><div class="form-grid">
-    <label>Persona asignada<input name="assigned_to" value="{{ item.assigned_to or item.get('assigned_to','') }}" placeholder="Nombre del responsable"></label>
+    {% if item.get('assigned_to') %}<label>Persona asignada<input value="{{ item.assigned_to }}" readonly title="Se cambia con Registrar asignación / devolución"></label>{% endif %}
     <label>Valor estimado (RD$)<input type="number" name="value" min="0" step="0.01" value="{{ item.value or item.get('value',0) }}"></label>
     <label>Fecha de compra<input type="date" name="purchase_date" value="{{ item.purchase_date or item.get('purchase_date','') }}"></label>
     <label>Garantía hasta<input type="date" name="warranty_until" value="{{ item.warranty_until or item.get('warranty_until','') }}"></label>

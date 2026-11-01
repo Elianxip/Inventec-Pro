@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Categorías{% endblock %}
+{% block breadcrumb %}Categorías{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">ORGANIZACIÓN DEL INVENTARIO</span><h1>Categorías <span class="heading-dot">.</span></h1><p class="muted">Clasifica tus activos para encontrarlos y reportarlos con facilidad.</p></div></div>
+<div class="two-col-layout">
+  <div class="panel"><div class="panel-header"><div><h2>Nueva categoría</h2><p>Crea un grupo para tus equipos.</p></div></div><form method="post" class="form-stack panel-inner"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><label>Nombre de categoría<input name="name" required placeholder="Ej. Equipos de red"></label><label>Descripción<textarea name="description" rows="3" placeholder="Descripción opcional"></textarea></label><button class="btn btn-primary" type="submit">＋ Crear categoría</button></form></div>
+  <div class="panel"><div class="panel-header"><div><h2>Categorías registradas</h2><p>{{ categories|length }} categoría(s)</p></div></div><div class="category-list">{% for c in categories %}<div class="category-row"><span class="category-icon">◫</span><div class="category-info"><b>{{ c.name }}</b><small>{{ c.description or 'Sin descripción' }}</small></div><span class="count-badge">{{ c.equipment_count }} equipo(s)</span><a class="btn btn-small btn-light" href="{{ url_for('category_edit', category_id=c.id) }}">Editar</a>{% if current_role == 'admin' %}<form method="post" action="{{ url_for('category_delete', category_id=c.id) }}" onsubmit="return confirm('¿Eliminar esta categoría? Los equipos no se borrarán.');"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="icon-button danger-text" title="Eliminar categoría">×</button></form>{% endif %}</div>{% else %}<p class="muted pad">No hay categorías.</p>{% endfor %}</div></div>
+</div>
+{% endblock %}

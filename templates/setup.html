@@ -7,6 +7,7 @@
   <p class="muted">Esta cuenta tendrá control total del sistema. Elige una contraseña única de al menos 10 caracteres.</p>
   <form method="post" class="form-stack">
     <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    {% if token_required %}<label>Código de instalación<input type="password" name="setup_token" required autocomplete="off" placeholder="El valor de INVENTEC_SETUP_TOKEN"></label>{% endif %}
     <label>Nombre completo<input name="full_name" required autocomplete="name" placeholder="Tu nombre"></label>
     <label>Nombre de usuario<input name="username" required minlength="3" autocomplete="username" placeholder="Ej. admin.inventec"></label>
     <label>Contraseña<input type="password" name="password" required minlength="10" autocomplete="new-password" placeholder="Mínimo 10 caracteres"></label>
